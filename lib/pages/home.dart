@@ -22,7 +22,7 @@ class _BookListScreenState extends State<BookListScreen> {
 
   Future<void> _loadBooks() async {
     final loadedBooks = await BookDatabase.instance.readAllBooks();
-    print("Loaded books count: ${loadedBooks.length}"); // Debug print
+    //print("Loaded books count: ${loadedBooks.length}"); // Debug print
     setState(() {
       books = loadedBooks;
     });
@@ -39,7 +39,7 @@ class _BookListScreenState extends State<BookListScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Add New Book"),
+          title: const Text("Add New Books"),
           content: SingleChildScrollView( 
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -178,7 +178,7 @@ class _BookListScreenState extends State<BookListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 92, 178, 240),
+      backgroundColor: const Color.fromARGB(255, 166, 240, 92),
       appBar: AppBar(
         title: Center(
           child: const Text(
