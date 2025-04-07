@@ -94,6 +94,7 @@ class BookDatabase {
 
   Future<Book> create(Book book) async {
   final db = await instance.database;
+  // ignore: unused_local_variable
   final id = await db.insert('books', book.toMap());
   return book.copyWith(title: book.title, author: book.author, genre: book.genre);
 }

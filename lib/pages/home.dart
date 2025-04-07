@@ -8,6 +8,7 @@ class BookListScreen extends StatefulWidget {
   const BookListScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _BookListScreenState createState() => _BookListScreenState();
 }
 

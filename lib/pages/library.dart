@@ -5,6 +5,7 @@ class LibPage extends StatefulWidget {
   const LibPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LibPageState createState() => _LibPageState();
 }
 
