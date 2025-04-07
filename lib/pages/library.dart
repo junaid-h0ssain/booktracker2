@@ -38,7 +38,7 @@ class _LibPageState extends State<LibPage> {
           ? const Center(
               child: Text(
                 "No books added yet",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             )
           : SingleChildScrollView(
