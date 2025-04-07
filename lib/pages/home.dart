@@ -164,7 +164,7 @@ class _BookListScreenState extends State<BookListScreen> {
         genre: details[2],
       );
       await BookDatabase.instance.update(updatedBook);
-      _loadBooks(); // Refresh list
+      _loadBooks(); 
     }
   }
 
@@ -232,9 +232,7 @@ class _BookListScreenState extends State<BookListScreen> {
                           "Genre: ${book.genre}\n"
                           "Added on: ${book.dateAdded}",
                         ),
-                        // Add some spacing
                         const SizedBox(height: 5),
-                        // Drop down to select status
                         DropdownButton<String>(
                           value: book.status,
                           items: const [
@@ -253,10 +251,9 @@ class _BookListScreenState extends State<BookListScreen> {
                           ],
                           onChanged: (String? newStatus) async {
                             if (newStatus != null && newStatus != book.status) {
-                              // Update the book status
                               Book updatedBook = book.copyWith(status: newStatus);
                               await BookDatabase.instance.update(updatedBook);
-                              _loadBooks(); // Refresh the list
+                              _loadBooks(); 
                             }
                           },
                         ),

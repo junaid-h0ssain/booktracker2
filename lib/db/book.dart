@@ -1,14 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-// Book model class
 class Book {
   final int? id;
   final String title;
   final String author;
   final String genre;
   final String dateAdded;
-  final String status; // New field
+  final String status; 
 
   Book({
     this.id,
@@ -16,7 +15,7 @@ class Book {
     required this.author,
     required this.genre,
     required this.dateAdded,
-    this.status = "Plan to Read", // Default value
+    this.status = "Reading", // Default value set at the beginning of each entry
   });
 
   Map<String, dynamic> toMap() {
@@ -37,7 +36,7 @@ class Book {
       author: map['author'],
       genre: map['genre'],
       dateAdded: map['dateAdded'],
-      status: map['status'] ?? "Plan to Read",
+      status: map['status'] ?? "Completed",
     );
   }
 
@@ -76,17 +75,6 @@ class BookDatabase {
     );
   }
 
-  // Future _createDB(Database db, int version) async {
-  //   const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-  //   const textType = 'TEXT NOT NULL';
-
-  //   await db.execute('''
-  //     CREATE TABLE books (
-  //       id $idType,
-  //       title $textType
-  //     )
-  //   ''');
-  // }
 
   Future<void> _createDB(Database db, int version) async {
       const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
@@ -106,7 +94,6 @@ class BookDatabase {
 
   Future<Book> create(Book book) async {
   final db = await instance.database;
-  // ignore: unused_local_variable
   final id = await db.insert('books', book.toMap());
   return book.copyWith(title: book.title, author: book.author, genre: book.genre);
 }

@@ -77,26 +77,3 @@ class _LibPageState extends State<LibPage> {
     );
   }
 }
-
-
-// import 'package:flutter/material.dart';
-
-// class LibPage extends StatelessWidget {
-//   const LibPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("Library"),
-//         backgroundColor: const Color.fromARGB(255, 246, 119, 162),
-//       ),
-//       body: Center(
-//         child: Text(
-//           "View Library",
-//           style: Theme.of(context).textTheme.titleLarge,
-//         ),
-//       ),
-//     );
-//   }
-// }
