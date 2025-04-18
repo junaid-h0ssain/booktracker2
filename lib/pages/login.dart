@@ -14,15 +14,10 @@ class _LoginPageState extends State<LoginPage> {
     String username = _usernameController.text;
     String password = _passwordController.text;
 
-    // In a real app, you would typically send this data to a server for authentication.
-    print('Username: $username, Password: $password');
-
-    // For this simple example, we'll just show a message.
     if (username == 'admin' && password == 'password') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Successful!')),
       );
-      // You would typically navigate to the next screen here.
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Failed. Invalid credentials.')),
@@ -51,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 20.0),
             TextField(
               controller: _passwordController,
-              obscureText: true, // Hide the password
+              obscureText: true, 
               decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
