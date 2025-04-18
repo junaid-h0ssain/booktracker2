@@ -23,7 +23,7 @@ class _BookListScreenState extends State<BookListScreen> {
 
   Future<void> _loadBooks() async {
     final loadedBooks = await BookDatabase.instance.readAllBooks();
-    //print("Loaded books count: ${loadedBooks.length}"); // Debug print
+    //print("Loaded books count: ${loadedBooks.length}"); 
     setState(() {
       books = loadedBooks;
     });
