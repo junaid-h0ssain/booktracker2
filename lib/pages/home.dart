@@ -34,7 +34,7 @@ class _BookListScreenState extends State<BookListScreen> {
     TextEditingController authorController = TextEditingController();
     TextEditingController genreController = TextEditingController();
     //String dateAdded = DateTime.now().toLocal().toString(); // e.g., 2025-02-18
-    String dateAdded = DateFormat('dd/MM/yyyy hh:mm:ss').format(DateTime.now());
+    String dateAdded = DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
 
     final String? newBookDetails = await showDialog<String>(
       context: context,
