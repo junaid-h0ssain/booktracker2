@@ -5,7 +5,7 @@ import 'package:booktracker/db/book.dart';
 import 'package:intl/intl.dart';
 
 class BookListScreen extends StatefulWidget {
-  const BookListScreen({super.key});
+  BookListScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -14,12 +14,49 @@ class BookListScreen extends StatefulWidget {
 
 class _BookListScreenState extends State<BookListScreen> {
   List<Book> books = [];
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _loadBooks();
   }
+
+  void showSearchDialog() {
+  TextEditingController searchController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Search Books"),
+        content: TextField(
+          controller: searchController,
+          decoration: const InputDecoration(hintText: "Enter book title..."),
+          onChanged: (value) {
+            setState(() {
+              books = books.where((book) {
+                return book.title.toLowerCase().contains(value.toLowerCase());
+              }).toList();
+            });
+          },
+        ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _loadBooks(); // Reset the full list
+              },
+              child: const Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 
   Future<void> _loadBooks() async {
     final loadedBooks = await BookDatabase.instance.readAllBooks();
@@ -177,112 +214,106 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 166, 240, 92),
-      appBar: AppBar(
-        title: Center(
-          child: const Text(
-            "Book Tracker",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 246, 119, 162),
-        leading: IconButton(
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color.fromARGB(255, 166, 240, 92),
+    appBar: AppBar(
+      title: const Text(
+        "Book Tracker",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: const Color.fromARGB(255, 246, 119, 162),
+      leading: IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: () {
+          showSearchDialog();
+        },
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.library_books),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SettingsPage()),
-            );
-          },
-          icon: const Icon(Icons.settings),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-              context,
               MaterialPageRoute(builder: (context) => const LibPage()),
             );
-            },
-            icon: const Icon(Icons.library_books),
-          )
-        ],
-      ),
-      body: books.isEmpty
-          ? const Center(
-              child: Text(
-                "No books added yet",
-                style: TextStyle(fontSize: 18,
-                fontWeight: FontWeight.bold),
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(10),
-              itemCount: books.length,
-              itemBuilder: (context, index) {
-                final book = books[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(book.title),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Author: ${book.author}\n"
-                          "Genre: ${book.genre}\n"
-                          "Added on: ${book.dateAdded}",
-                        ),
-                        const SizedBox(height: 5),
-                        DropdownButton<String>(
-                          value: book.status,
-                          items: const [
-                            DropdownMenuItem(
-                              value: "Reading",
-                              child: Text("Reading"),
-                            ),
-                            DropdownMenuItem(
-                              value: "Completed",
-                              child: Text("Completed"),
-                            ),
-                            DropdownMenuItem(
-                              value: "Plan to Read",
-                              child: Text("Plan to Read"),
-                            ),
-                          ],
-                          onChanged: (String? newStatus) async {
-                            if (newStatus != null && newStatus != book.status) {
-                              Book updatedBook = book.copyWith(status: newStatus);
-                              await BookDatabase.instance.update(updatedBook);
-                              _loadBooks(); 
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () => _editBook(book),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => _deleteBook(book.id!),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-
-              },
+          },
+        ),
+      ],
+    ),
+    body: books.isEmpty
+        ? const Center(
+            child: Text(
+              "No books added yet",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 246, 119, 162),
-        onPressed: _showAddBookDialog,
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+          )
+        : ListView.builder(
+            padding: const EdgeInsets.all(10),
+            itemCount: books.length,
+            itemBuilder: (context, index) {
+              final book = books[index];
+              return Card(
+                child: ListTile(
+                  title: Text(book.title),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Author: ${book.author}\n"
+                        "Genre: ${book.genre}\n"
+                        "Added on: ${book.dateAdded}",
+                      ),
+                      const SizedBox(height: 5),
+                      DropdownButton<String>(
+                        value: book.status,
+                        items: const [
+                          DropdownMenuItem(
+                            value: "Reading",
+                            child: Text("Reading"),
+                          ),
+                          DropdownMenuItem(
+                            value: "Completed",
+                            child: Text("Completed"),
+                          ),
+                          DropdownMenuItem(
+                            value: "Plan to Read",
+                            child: Text("Plan to Read"),
+                          ),
+                        ],
+                        onChanged: (String? newStatus) async {
+                          if (newStatus != null && newStatus != book.status) {
+                            Book updatedBook =
+                                book.copyWith(status: newStatus);
+                            await BookDatabase.instance.update(updatedBook);
+                            _loadBooks();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () => _editBook(book),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => _deleteBook(book.id!),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+    floatingActionButton: FloatingActionButton(
+      backgroundColor: const Color.fromARGB(255, 246, 119, 162),
+      onPressed: _showAddBookDialog,
+      child: const Icon(Icons.add),
+    ),
+  );
+}
 }
