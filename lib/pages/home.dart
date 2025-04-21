@@ -1,8 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:booktracker/pages/settings.dart';
+// import 'package:booktracker/pages/settings.dart';
 import 'package:booktracker/pages/library.dart';
 import 'package:booktracker/db/book.dart';
 import 'package:intl/intl.dart';
+
+class BookSearchDelegate extends SearchDelegate {
+  final List<Book> allBooks;
+
+  BookSearchDelegate(this.allBooks);
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final results = allBooks.where((book) =>
+      book.title.toLowerCase().contains(query.toLowerCase()) ||
+      book.author.toLowerCase().contains(query.toLowerCase()) ||
+      book.genre.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+
+    return ListView.builder(
+      itemCount: results.length,
+      itemBuilder: (context, index) {
+        final book = results[index];
+        return ListTile(
+          title: Text(book.title),
+          subtitle: Text("Author: ${book.author}\nGenre: ${book.genre}"),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestions = allBooks.where((book) =>
+      book.title.toLowerCase().contains(query.toLowerCase()) ||
+      book.author.toLowerCase().contains(query.toLowerCase()) ||
+      book.genre.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+
+    return ListView.builder(
+      itemCount: suggestions.length,
+      itemBuilder: (context, index) {
+        final book = suggestions[index];
+        return ListTile(
+          title: Text(book.title),
+          subtitle: Text("Author: ${book.author}"),
+          onTap: () {
+            query = book.title;
+            showResults(context);
+          },
+        );
+      },
+    );
+  }
+}
 
 class BookListScreen extends StatefulWidget {
   BookListScreen({super.key});
@@ -22,41 +92,6 @@ class _BookListScreenState extends State<BookListScreen> {
     super.initState();
     _loadBooks();
   }
-
-  void showSearchDialog() {
-  TextEditingController searchController = TextEditingController();
-
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text("Search Books"),
-        content: TextField(
-          controller: searchController,
-          decoration: const InputDecoration(hintText: "Enter book title..."),
-          onChanged: (value) {
-            setState(() {
-              books = books.where((book) {
-                return book.title.toLowerCase().contains(value.toLowerCase());
-              }).toList();
-            });
-          },
-        ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _loadBooks(); // Reset the full list
-              },
-              child: const Text("Close"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
 
   Future<void> _loadBooks() async {
     final loadedBooks = await BookDatabase.instance.readAllBooks();
@@ -226,7 +261,10 @@ Widget build(BuildContext context) {
       leading: IconButton(
         icon: const Icon(Icons.search),
         onPressed: () {
-          showSearchDialog();
+          showSearch(
+            context: context,
+            delegate: BookSearchDelegate(books),
+          );
         },
       ),
       actions: [
