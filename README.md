@@ -1,6 +1,6 @@
 # booktracker
 
-A new Flutter project.
+A new Flutter project made for our App development course.
 
 ## Getting Started
 
