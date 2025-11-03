@@ -1,6 +1,6 @@
 # BookTracker
 
-BookTracker is a small Flutter application for tracking books — personal library management with pages for home, library, login and settings. It was created as part of an app development course and is implemented using Flutter.
+BookTracker is a small Flutter application for tracking books — personal library management with pages for home, library, login and settings. It was created as part of an app development course and is implemented using Flutter. Flutter was used as it was easy to view and develop the app on a browser, which was a live saver on my low spec laptop.
 
 This repository contains the Flutter project used to run and build the BookTracker app on Android, iOS, web and desktop platforms.
 
