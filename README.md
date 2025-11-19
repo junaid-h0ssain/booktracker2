@@ -14,7 +14,7 @@ This repository contains the Flutter project used to run and build the BookTrack
 Clone and run
 
 ```bash
-git clone <this-repo-url>
+git clone https://github.com/junaid-h0ssain/booktracker2.git
 cd booktracker2
 
 flutter pub get
